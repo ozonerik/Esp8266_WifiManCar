@@ -38,6 +38,7 @@ String ssid;
 String pass;
 String ip;
 String gateway;
+String IPLocal;
 
 // File paths to save input values permanently
 const char* ssidPath = "/ssid.txt";
@@ -138,8 +139,15 @@ bool initWiFi() {
     return true;
 }
 
-
-
+String processor(const String& var) {
+  if(var == "MYIP") {
+    if(WiFi.status() != WL_CONNECTED) {
+      return WiFi.softAPIP().toString();
+    }
+    return WiFi.localIP().toString();
+  }
+  return String();
+}
 
 void forword() {  
   speed(speedCar);           //forword
@@ -274,13 +282,23 @@ if(initWiFi()) {
       Serial.print("Command: ");
       Serial.println(command);
       //request->send(200, "text/plain", command);
-      request->send(LittleFS, "/index.html", "text/html");
+      request->send(LittleFS, "/index.html", "text/html",false,processor);
     });
     server.serveStatic("/", LittleFS, "/");
     server.begin();
   }
   else {
-    
+
+    // Connect to Wi-Fi network with SSID and password
+    Serial.println("Setting AP (Access Point)");
+    // NULL sets an open Access Point
+    WiFi.softAP("ESP-WIFI-CAR", "12345678");
+
+    IPAddress IP = WiFi.softAPIP();
+    IPLocal=IP.toString();
+    Serial.print("AP IP address: ");
+    Serial.println(IP); 
+
     server.on("/", HTTP_GET, [] (AsyncWebServerRequest *request) {
     // GET input1 value on <ESP_IP>/?State=
     if (request->hasParam("State")) {
@@ -289,19 +307,10 @@ if(initWiFi()) {
       Serial.print("Command: ");
       Serial.println(command);
       //request->send(200, "text/plain", command);
-      request->send(LittleFS, "/index.html", "text/html");
+      request->send(LittleFS, "/index.html", "text/html",false,processor);
     });
     server.serveStatic("/", LittleFS, "/");
     server.begin();
-
-    // Connect to Wi-Fi network with SSID and password
-    Serial.println("Setting AP (Access Point)");
-    // NULL sets an open Access Point
-    WiFi.softAP("ESP-WIFI-CAR", "12345678");
-
-    IPAddress IP = WiFi.softAPIP();
-    Serial.print("AP IP address: ");
-    Serial.println(IP); 
 
     // Web Server Root URL
     server.on("/wifimanager", HTTP_GET, [](AsyncWebServerRequest *request){

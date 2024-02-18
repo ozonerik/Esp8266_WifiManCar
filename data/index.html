@@ -1,27 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>ESP WEB SERVER</title>
+    <title>ESP8266 WIFI CAR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   </head>
   <body>
-    <div class="topnav">
-      <h1>ESP WEB SERVER</h1>
-    </div>
-    <div class="content">
-      <div class="card-grid">
-        <div class="card">
-          <p class="card-title"><i class="fas fa-lightbulb"></i> GPIO 2</p>
-          <p>
-            <a href="on"><button class="button-on">ON</button></a>
-            <a href="off"><button class="button-off">OFF</button></a>
-          </p>
-          <p class="state">State: %STATE%</p>
+    <div class="container text-center">
+      <div class="row">
+        <div class="col mt-3 bg-dark text-light">
+          <h1>ESP8266 WIFI CAR</h1>
         </div>
       </div>
+      <div class="row  mt-3">
+        <div class="col">&nbsp;</div>
+        <div class="col p-3" style="max-width:140px">
+          <button onmousedown="mouseLF()" onmouseup="mouseUp()" class="btn btn-primary" style="width:100px">LF</button>
+        </div>
+        <div class="col p-3" style="max-width:140px">
+          <button onmousedown="mouseF()" onmouseup="mouseUp()" class="btn btn-success" style="width:100px">F</button>
+        </div>
+        <div class="col p-3" style="max-width:140px">
+          <button onmousedown="mouseRF()" onmouseup="mouseUp()" class="btn btn-primary" style="width:100px">RF</button>
+        </div>
+        <div class="col">&nbsp;</div>
+      </div>
+      <div class="row">
+        <div class="col">&nbsp;</div>
+        <div class="col p-3" style="max-width:140px">
+          <button onmousedown="mouseL()" onmouseup="mouseUp()" class="btn btn-success" style="width:100px">L</button>
+        </div>
+        <div class="col p-3" style="max-width:140px">
+          <button onmousedown="mouseS()" onmouseup="mouseUp()" class="btn btn-danger" style="width:100px">S</button>
+        </div>
+        <div class="col p-3" style="max-width:140px">
+          <button onmousedown="mouseR()" onmouseup="mouseUp()" class="btn btn-success" style="width:100px">R</button>
+        </div>
+        <div class="col">&nbsp;</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">&nbsp;</div>
+        <div class="col p-3" style="max-width:140px">
+          <button onmousedown="mouseLB()" onmouseup="mouseUp()" class="btn btn-primary" style="width:100px">LB</button>
+        </div>
+        <div class="col p-3" style="max-width:140px">
+          <button onmousedown="mouseB()" onmouseup="mouseUp()" class="btn btn-success" style="width:100px">B</button>
+        </div>
+        <div class="col p-3" style="max-width:140px">
+          <button onmousedown="mouseRB()" onmouseup="mouseUp()" class="btn btn-primary" style="width:100px">RB</button>
+        </div>
+        <div class="col">&nbsp;</div>
+      </div>
     </div>
+    <script src="/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+      let params = new URL(document.location).searchParams;
+      function mouseUp() {
+        location.assign('?State=S');
+        let State = params.get("State");
+        console.log(State);  
+      }
+      function mouseS() {
+        location.assign('?State=S');
+        let State = params.get("State");
+        console.log(State);  
+      }
+
+      function mouseL() {
+        location.assign('?State=L');
+        let State = params.get("State");
+        console.log(State);  
+      }
+
+      function mouseR() {
+        location.assign('?State=R');
+        let State = params.get("State");
+        console.log(State);  
+      }
+
+      function mouseF() {
+        location.assign('?State=F');
+        let State = params.get("State");
+        console.log(State);  
+      }
+      function mouseLF() {
+        location.assign('?State=G');
+        let State = params.get("State");
+        console.log(State);  
+      }
+      function mouseRF() {
+        location.assign('?State=I');
+        let State = params.get("State");
+        console.log(State);  
+      }
+
+      function mouseB() {
+        location.assign('?State=B');
+        let State = params.get("State");
+        console.log(State);  
+      }
+      function mouseLB() {
+        location.assign('?State=J');
+        let State = params.get("State");
+        console.log(State);  
+      }
+      function mouseRB() {
+        location.assign('?State=H');
+        let State = params.get("State");
+        console.log(State);  
+      }
+
+
+    </script>
   </body>
 </html>

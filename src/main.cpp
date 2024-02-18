@@ -7,8 +7,8 @@
 
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
-#include <ESP8266WebServer.h>
-//#include <ESPAsyncWebServer.h>
+//#include <ESP8266WebServer.h>
+#include <ESPAsyncWebServer.h>
 #include <ESPAsyncTCP.h>
 #include "LittleFS.h"
 
@@ -22,7 +22,8 @@ void speed(int s){
 }
 const char* ssid = "NodeMCU Car";
 const char* pswd = "12345678";
-ESP8266WebServer server(80);
+//ESP8266WebServer server(80);
+AsyncWebServer server(80);
 
 void forword() {  
   speed(speedCar);           //forword
@@ -99,9 +100,21 @@ void Stop() {               //stop
   digitalWrite(IN_4, LOW);  //Left Motor forword Pin
 }
 
+// Initialize LittleFS
+void initFS() {
+  if (!LittleFS.begin()) {
+    Serial.println("An error has occurred while mounting LittleFS");
+  }
+  else{
+    Serial.println("LittleFS mounted successfully");
+  }
+}
+
 void setup() {
 
   Serial.begin(115200);
+
+  initFS();
 
   pinMode(ENA, OUTPUT);
   pinMode(IN_1, OUTPUT);
@@ -121,14 +134,28 @@ void setup() {
   Serial.println(ssid);
   Serial.print("IP address: ");
   Serial.println(myIP);
- 
-  // Starting WEB-server
-  server.on("/", [](){
-    if( server.hasArg("State") ){
-        Serial.println(server.arg("State"));
+
+  server.on("/bootstrap.min.css", HTTP_GET, [] (AsyncWebServerRequest *request) {
+    request->send(LittleFS, "/bootstrap.min.css", "text/css");
+  });
+
+  server.on("/bootstrap.bundle.min.js", HTTP_GET, [] (AsyncWebServerRequest *request) {
+    request->send(LittleFS, "/bootstrap.bundle.min.js", "text/js");
+  });
+
+  server.on("/favicon.png", HTTP_GET, [] (AsyncWebServerRequest *request) {
+    request->send(LittleFS, "/favicon.png", "image/png");
+  });
+
+  server.on("/", HTTP_GET, [] (AsyncWebServerRequest *request) {
+  // GET input1 value on <ESP_IP>/?State=
+  if (request->hasParam("State")) {
+    command = request->getParam("State")->value();
     }
-    server.send ( 404, "text/plain", "404: Not found" );
-    delay(1);
+    Serial.print("Command: ");
+    Serial.println(command);
+    //request->send(200, "text/plain", command);
+    request->send(LittleFS, "/index.html", "text/html");
   });
 
   server.begin();    
@@ -136,11 +163,13 @@ void setup() {
 
 void loop() {
 
-  server.handleClient();
+  //server.handleClient();
   analogWrite(ENA, speedA);
   analogWrite(ENB, speedB);
+  //Serial.print("Command: ");
+  //Serial.println(command);
 
-  command = server.arg("State");
+  //command = server.arg("State");
   if (command == "F") forword();
   else if (command == "B") backword();
   else if (command == "L") turnLeft();

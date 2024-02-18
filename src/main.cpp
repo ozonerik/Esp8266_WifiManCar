@@ -359,7 +359,7 @@ if(initWiFi()) {
         }
       }
       restart = true;
-      request->send(200, "text/html", "<h1 style='text-align: center'>Done. ESP will restart, connect to your router and go to IP address: <div style='color:red; font-size: 60px;'>" + ip +"</div></h1>");
+      request->send(200, "text/html", "<h1 style='text-align: center'>Done. ESP will restart, connect to your router and go to IP address:</h1><br><br><div style='color:red; font-size: 60px;'>" + ip +"</div>");
     });
   server.begin();
   }

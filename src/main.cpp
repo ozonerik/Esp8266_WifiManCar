@@ -139,6 +139,34 @@ bool initWiFi() {
     return true;
 }
 
+void resetAP(){
+  ssid = "";
+    Serial.print("SSID set to: ");
+    Serial.println(ssid);
+    // Write file to save value
+    writeFile(LittleFS, ssidPath, ssid.c_str());
+
+    pass = "";
+    Serial.print("Password set to: ");
+    Serial.println(pass);
+    // Write file to save value
+    writeFile(LittleFS, passPath, pass.c_str());
+
+    ip = "";
+    Serial.print("IP Address set to: ");
+    Serial.println(ip);
+    // Write file to save value
+    writeFile(LittleFS, ipPath, ip.c_str());
+
+    gateway = "";
+    Serial.print("Gateway set to: ");
+    Serial.println(gateway);
+    // Write file to save value
+    writeFile(LittleFS, gatewayPath, gateway.c_str());
+    restart = true;
+    Serial.print("Reset Done. ESP will restart, connect to your router and go to IP address: 192.168.4.1");
+}
+
 String processor(const String& var) {
   if(var == "MYIP") {
     if(WiFi.status() != WL_CONNECTED) {
@@ -363,10 +391,16 @@ if(initWiFi()) {
     });
   server.begin();
   }
-  //***end 
+  //***end
+  // RESET
+  server.on("/reset", HTTP_GET, [](AsyncWebServerRequest *request){
+    resetAP();
+    request->send(200, "text/html", "<h1 style='text-align: center'>Reset Done. ESP will restart, connect to your router and go to IP address:</h1><br><br><div style='text-align: center; color:red; font-size: 60px;'>192.168.4.1</div>");
+  });
+  server.begin();
 }
 
-void loop() {
+void loop(){
 
   if (restart){
     delay(5000);

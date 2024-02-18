@@ -143,7 +143,7 @@ String processor(const String& var) {
   if(var == "MYIP") {
     if(WiFi.status() != WL_CONNECTED) {
       return WiFi.softAPIP().toString();
-    }
+    } 
     return WiFi.localIP().toString();
   }
   return String();
@@ -359,7 +359,7 @@ if(initWiFi()) {
         }
       }
       restart = true;
-      request->send(200, "text/plain", "Done. ESP will restart, connect to your router and go to IP address: " + ip);
+      request->send(200, "text/html", "<h1 style='text-align: center'>Done. ESP will restart, connect to your router and go to IP address: <div style='color:red; font-size: 60px;'>" + ip +"</div></h1>");
     });
   server.begin();
   }

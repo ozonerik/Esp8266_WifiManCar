@@ -131,9 +131,11 @@ bool initWiFi() {
     Serial.println("Failed to connect.");
     return false;
   }
-
-  Serial.println(WiFi.localIP());
-  return true;
+    Serial.print("Successfully connected to ");
+    Serial.println(ssid);
+    Serial.print("IP Address: ");
+    Serial.println(WiFi.localIP());
+    return true;
 }
 
 

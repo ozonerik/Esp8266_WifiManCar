@@ -5,6 +5,10 @@
 #define IN_3  2           // L298N in3 motors Left            GPIO2(D4)
 #define IN_4  0           // L298N in4 motors Left            GPIO0(D3)
 
+#define LED_R  5           // L298N in4 motors Left            GPIO5(D1)
+#define LED_L  4           // L298N in4 motors Left            GPIO4(D2)
+#define B_RESET  16           // L298N in4 motors Left            GPIO16(D0)
+
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
 //#include <ESP8266WebServer.h>
@@ -20,6 +24,7 @@ void speed(int s){
   speedA= s;
   speedB= s;
 }
+
 //const char* ssid = "NodeMCU Car";
 //const char* pswd = "12345678";
 //ESP8266WebServer server(80);
@@ -264,6 +269,10 @@ void setup() {
   pinMode(IN_3, OUTPUT);
   pinMode(IN_4, OUTPUT);
   pinMode(ENB, OUTPUT);
+
+  pinMode(B_RESET, INPUT);
+  pinMode(LED_R, OUTPUT);
+  pinMode(LED_L, OUTPUT);
 
   // Load values saved in LittleFS
   ssid = readFile(LittleFS, ssidPath);

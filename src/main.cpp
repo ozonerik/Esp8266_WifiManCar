@@ -7,6 +7,9 @@
 
 #define LED_R  5           // L298N in4 motors Left            GPIO5(D1)
 #define LED_L  4           // L298N in4 motors Left            GPIO4(D2)
+//#define LED_FL  0           // L298N in4 motors Left            GPIO0(D3)
+//#define LED_BL  2           // L298N in3 motors Left            GPIO2(D4)
+
 #define B_RESET  16           // L298N in4 motors Left            GPIO16(D0)
 
 #include <ESP8266WiFi.h>
@@ -24,6 +27,7 @@ void speed(int s){
   speedA= s;
   speedB= s;
 }
+String lampu = "stop";
 
 //const char* ssid = "NodeMCU Car";
 //const char* pswd = "12345678";
@@ -115,8 +119,21 @@ void writeFile(fs::FS &fs, const char * path, const char * message){
 
 // Initialize WiFi
 bool initWiFi() {
+  String lampuwifi;
   if(ssid=="" || ip==""){
     Serial.println("Undefined SSID or IP address.");
+    for (int i = 0; i <= 3; i++)
+    {
+      digitalWrite(LED_R, HIGH);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, HIGH);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+    }
     return false;
   }
 
@@ -126,26 +143,41 @@ bool initWiFi() {
 
   if (!WiFi.config(localIP, localGateway, subnet)){
     Serial.println("STA Failed to configure");
+    for (int i = 0; i <= 3; i++)
+    {
+      digitalWrite(LED_R, HIGH);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, HIGH);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+    }
     return false;
   }
 
   WiFi.begin(ssid.c_str(), pass.c_str());
 
   Serial.println("Connecting to WiFi...");
-  delay(20000);
+  for (int i = 0; i <= 3; i++)
+  {
+    digitalWrite(LED_R, HIGH);
+    digitalWrite(LED_L, LOW);
+    delay(500);
+    digitalWrite(LED_R, LOW);
+    digitalWrite(LED_L, HIGH);
+    delay(500);
+    digitalWrite(LED_R, LOW);
+    digitalWrite(LED_L, LOW);
+    delay(500);
+  }
+  delay(5000);
   if(WiFi.status() != WL_CONNECTED) {
     Serial.println("Failed to connect.");
-    return false;
-  }
-    Serial.print("Successfully connected to ");
-    Serial.println(ssid);
-    Serial.print("IP Address: ");
-    Serial.println(WiFi.localIP());
-    return true;
-}
-
-void resetAP(){
-  ssid = "";
+    //reset AP
+    ssid = "";
     Serial.print("SSID set to: ");
     Serial.println(ssid);
     // Write file to save value
@@ -168,6 +200,72 @@ void resetAP(){
     Serial.println(gateway);
     // Write file to save value
     writeFile(LittleFS, gatewayPath, gateway.c_str());
+    for (int i = 0; i <= 3; i++)
+    {
+      digitalWrite(LED_R, HIGH);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, HIGH);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+    }
+    restart = true;
+    Serial.print("Reset Done. ESP will restart, connect to your router and go to IP address: 192.168.4.1");
+    return false;
+    //end reset
+  }
+    for (int i = 0; i < 2; i++)
+    {
+      digitalWrite(LED_R, HIGH);
+      digitalWrite(LED_L, HIGH);
+      delay(2000);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, LOW);
+      delay(2000);
+    }
+    Serial.print("Successfully connected to ");
+    Serial.println(ssid);
+    Serial.print("IP Address: ");
+    Serial.println(WiFi.localIP());
+    return true;
+}
+
+void resetAP(){
+    ssid = "";
+    Serial.print("SSID set to: ");
+    Serial.println(ssid);
+    // Write file to save value
+    writeFile(LittleFS, ssidPath, ssid.c_str());
+
+    pass = "";
+    Serial.print("Password set to: ");
+    Serial.println(pass);
+    // Write file to save value
+    writeFile(LittleFS, passPath, pass.c_str());
+
+    ip = "";
+    Serial.print("IP Address set to: ");
+    Serial.println(ip);
+    // Write file to save value
+    writeFile(LittleFS, ipPath, ip.c_str());
+
+    gateway = "";
+    Serial.print("Gateway set to: ");
+    Serial.println(gateway);
+    // Write file to save value
+    writeFile(LittleFS, gatewayPath, gateway.c_str());
+    for (int i = 0; i <= 2; i++)
+    {
+      digitalWrite(LED_R, HIGH);
+      digitalWrite(LED_L, HIGH);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+    }
     restart = true;
     Serial.print("Reset Done. ESP will restart, connect to your router and go to IP address: 192.168.4.1");
 }
@@ -182,12 +280,42 @@ String processor(const String& var) {
   return String();
 }
 
+void lampuled(String arah){
+  lampu = arah;
+  if(lampu=="maju"){
+  digitalWrite(LED_R, HIGH);
+  digitalWrite(LED_L, HIGH);
+  }else if(lampu=="mundur"){
+  digitalWrite(LED_R, HIGH);
+  digitalWrite(LED_L, HIGH);
+  }else if(lampu=="kanan"){
+    digitalWrite(LED_R, HIGH);
+    digitalWrite(LED_L, LOW);
+    delay(100);
+    digitalWrite(LED_R, LOW);
+    digitalWrite(LED_L, LOW);
+    delay(100);
+  }else if(lampu=="kiri"){
+    digitalWrite(LED_R, LOW);
+    digitalWrite(LED_L, HIGH);
+    delay(100);
+    digitalWrite(LED_R, LOW);
+    digitalWrite(LED_L, LOW);
+    delay(100);
+  }else if(lampu=="stop"){
+  digitalWrite(LED_R, LOW);
+  digitalWrite(LED_L, LOW);
+  }
+
+}
+
 void forword() {  
   speed(speedCar);           //forword
   digitalWrite(IN_1, HIGH);  //Right Motor forword Pin
   digitalWrite(IN_2, LOW);   //Right Motor backword Pin
   digitalWrite(IN_3, LOW);   //Left Motor backword Pin
   digitalWrite(IN_4, HIGH);  //Left Motor forword Pin
+  lampuled("maju");
 }
 
 void rightforword() {  
@@ -197,6 +325,7 @@ void rightforword() {
   digitalWrite(IN_2, LOW);   //Right Motor backword Pin
   digitalWrite(IN_3, LOW);   //Left Motor backword Pin
   digitalWrite(IN_4, HIGH);  //Left Motor forword Pin
+  lampuled("kanan");
 }
 
 void leftforword() {  
@@ -206,6 +335,7 @@ void leftforword() {
   digitalWrite(IN_2, LOW);   //Right Motor backword Pin
   digitalWrite(IN_3, LOW);   //Left Motor backword Pin
   digitalWrite(IN_4, HIGH);  //Left Motor forword Pin
+  lampuled("kiri");
 }
 
 void backword() {            //backword
@@ -214,6 +344,7 @@ void backword() {            //backword
   digitalWrite(IN_2, HIGH);  //Right Motor backword Pin
   digitalWrite(IN_3, HIGH);  //Left Motor backword Pin
   digitalWrite(IN_4, LOW);   //Left Motor forword Pin
+  lampuled("mundur");
 }
 
 void leftbackword() {            //backword
@@ -223,6 +354,7 @@ void leftbackword() {            //backword
   digitalWrite(IN_2, HIGH);  //Right Motor backword Pin
   digitalWrite(IN_3, HIGH);  //Left Motor backword Pin
   digitalWrite(IN_4, LOW);   //Left Motor forword Pin
+  lampuled("kiri");
 }
 
 void rightbackword() {            //backword
@@ -232,6 +364,7 @@ void rightbackword() {            //backword
   digitalWrite(IN_2, HIGH);  //Right Motor backword Pin
   digitalWrite(IN_3, HIGH);  //Left Motor backword Pin
   digitalWrite(IN_4, LOW);   //Left Motor forword Pin
+  lampuled("kanan");
 }
 
 void turnRight() {           //turnRight
@@ -240,6 +373,7 @@ void turnRight() {           //turnRight
   digitalWrite(IN_2, HIGH);  //Right Motor backword Pin
   digitalWrite(IN_3, LOW);   //Left Motor backword Pin
   digitalWrite(IN_4, HIGH);  //Left Motor forword Pin
+  lampuled("kanan");
 }
 
 void turnLeft() {            //turnLeft
@@ -248,13 +382,16 @@ void turnLeft() {            //turnLeft
   digitalWrite(IN_2, LOW);   //Right Motor backword Pin
   digitalWrite(IN_3, HIGH);  //Left Motor backword Pin
   digitalWrite(IN_4, LOW);   //Left Motor forword Pin
+  lampuled("kiri");
 }
 
-void Stop() {               //stop
+void Stop() {              //stop
+  speed(0);
   digitalWrite(IN_1, LOW);  //Right Motor forword Pin
   digitalWrite(IN_2, LOW);  //Right Motor backword Pin
   digitalWrite(IN_3, LOW);  //Left Motor backword Pin
   digitalWrite(IN_4, LOW);  //Left Motor forword Pin
+  lampuled("stop");
 }
 
 void setup() {
@@ -273,6 +410,8 @@ void setup() {
   pinMode(B_RESET, INPUT);
   pinMode(LED_R, OUTPUT);
   pinMode(LED_L, OUTPUT);
+
+  digitalWrite(B_RESET,HIGH);
 
   // Load values saved in LittleFS
   ssid = readFile(LittleFS, ssidPath);
@@ -310,6 +449,15 @@ void setup() {
 
 //***start
 if(initWiFi()) {
+    for (int i = 0; i < 2; i++)
+    {
+      digitalWrite(LED_R, HIGH);
+      digitalWrite(LED_L, HIGH);
+      delay(2000);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, LOW);
+      delay(2000);
+    }
     // Route for root / web page
     server.on("/", HTTP_GET, [] (AsyncWebServerRequest *request) {
     // GET input1 value on <ESP_IP>/?State=
@@ -325,11 +473,23 @@ if(initWiFi()) {
     server.begin();
   }
   else {
-
     // Connect to Wi-Fi network with SSID and password
     Serial.println("Setting AP (Access Point)");
     // NULL sets an open Access Point
     WiFi.softAP("ESP-WIFI-CAR", "12345678");
+
+    for (int i = 0; i <= 3; i++)
+    {
+      digitalWrite(LED_R, HIGH);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, HIGH);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+    }
 
     IPAddress IP = WiFi.softAPIP();
     IPLocal=IP.toString();
@@ -414,6 +574,13 @@ void loop(){
   if (restart){
     delay(5000);
     ESP.restart();
+  }
+
+  if (digitalRead(B_RESET) == LOW){
+    Serial.print("B_RESET YES");
+    resetAP();
+    digitalWrite(B_RESET,HIGH);
+    //resetAP();
   }
   
   //server.handleClient();

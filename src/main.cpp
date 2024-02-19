@@ -119,21 +119,10 @@ void writeFile(fs::FS &fs, const char * path, const char * message){
 
 // Initialize WiFi
 bool initWiFi() {
-  String lampuwifi;
+  void lampuled(String nilai);
   if(ssid=="" || ip==""){
     Serial.println("Undefined SSID or IP address.");
-    for (int i = 0; i <= 3; i++)
-    {
-      digitalWrite(LED_R, HIGH);
-      digitalWrite(LED_L, LOW);
-      delay(500);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, HIGH);
-      delay(500);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, LOW);
-      delay(500);
-    }
+    lampuled("loading");
     return false;
   }
 
@@ -143,36 +132,14 @@ bool initWiFi() {
 
   if (!WiFi.config(localIP, localGateway, subnet)){
     Serial.println("STA Failed to configure");
-    for (int i = 0; i <= 3; i++)
-    {
-      digitalWrite(LED_R, HIGH);
-      digitalWrite(LED_L, LOW);
-      delay(500);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, HIGH);
-      delay(500);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, LOW);
-      delay(500);
-    }
+    lampuled("loading");
     return false;
   }
 
   WiFi.begin(ssid.c_str(), pass.c_str());
 
   Serial.println("Connecting to WiFi...");
-  for (int i = 0; i <= 3; i++)
-  {
-    digitalWrite(LED_R, HIGH);
-    digitalWrite(LED_L, LOW);
-    delay(500);
-    digitalWrite(LED_R, LOW);
-    digitalWrite(LED_L, HIGH);
-    delay(500);
-    digitalWrite(LED_R, LOW);
-    digitalWrite(LED_L, LOW);
-    delay(500);
-  }
+  lampuled("loading");
   delay(5000);
   if(WiFi.status() != WL_CONNECTED) {
     Serial.println("Failed to connect.");
@@ -200,32 +167,14 @@ bool initWiFi() {
     Serial.println(gateway);
     // Write file to save value
     writeFile(LittleFS, gatewayPath, gateway.c_str());
-    for (int i = 0; i <= 3; i++)
-    {
-      digitalWrite(LED_R, HIGH);
-      digitalWrite(LED_L, LOW);
-      delay(500);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, HIGH);
-      delay(500);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, LOW);
-      delay(500);
-    }
+
     restart = true;
     Serial.print("Reset Done. ESP will restart, connect to your router and go to IP address: 192.168.4.1");
     return false;
     //end reset
   }
-    for (int i = 0; i < 2; i++)
-    {
-      digitalWrite(LED_R, HIGH);
-      digitalWrite(LED_L, HIGH);
-      delay(2000);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, LOW);
-      delay(2000);
-    }
+    
+    lampuled("sukses");
     Serial.print("Successfully connected to ");
     Serial.println(ssid);
     Serial.print("IP Address: ");
@@ -239,33 +188,23 @@ void resetAP(){
     Serial.println(ssid);
     // Write file to save value
     writeFile(LittleFS, ssidPath, ssid.c_str());
-
     pass = "";
     Serial.print("Password set to: ");
     Serial.println(pass);
     // Write file to save value
     writeFile(LittleFS, passPath, pass.c_str());
-
     ip = "";
     Serial.print("IP Address set to: ");
     Serial.println(ip);
     // Write file to save value
     writeFile(LittleFS, ipPath, ip.c_str());
-
     gateway = "";
     Serial.print("Gateway set to: ");
     Serial.println(gateway);
     // Write file to save value
     writeFile(LittleFS, gatewayPath, gateway.c_str());
-    for (int i = 0; i <= 2; i++)
-    {
-      digitalWrite(LED_R, HIGH);
-      digitalWrite(LED_L, HIGH);
-      delay(500);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, LOW);
-      delay(500);
-    }
+    void lampuled(String nilai);
+    lampuled("sukses");
     restart = true;
     Serial.print("Reset Done. ESP will restart, connect to your router and go to IP address: 192.168.4.1");
 }
@@ -283,11 +222,11 @@ String processor(const String& var) {
 void lampuled(String arah){
   lampu = arah;
   if(lampu=="maju"){
-  digitalWrite(LED_R, HIGH);
-  digitalWrite(LED_L, HIGH);
+    digitalWrite(LED_R, HIGH);
+    digitalWrite(LED_L, HIGH);
   }else if(lampu=="mundur"){
-  digitalWrite(LED_R, HIGH);
-  digitalWrite(LED_L, HIGH);
+    digitalWrite(LED_R, HIGH);
+    digitalWrite(LED_L, HIGH);
   }else if(lampu=="kanan"){
     digitalWrite(LED_R, HIGH);
     digitalWrite(LED_L, LOW);
@@ -303,8 +242,31 @@ void lampuled(String arah){
     digitalWrite(LED_L, LOW);
     delay(100);
   }else if(lampu=="stop"){
-  digitalWrite(LED_R, LOW);
-  digitalWrite(LED_L, LOW);
+    digitalWrite(LED_R, LOW);
+    digitalWrite(LED_L, LOW);
+  }else if(lampu=="sukses"){
+    for (int i = 0; i <= 2; i++)
+    {
+      digitalWrite(LED_R, HIGH);
+      digitalWrite(LED_L, HIGH);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+    }
+  }else if(lampu=="loading"){
+    for (int i = 0; i <= 3; i++)
+    {
+      digitalWrite(LED_R, HIGH);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, HIGH);
+      delay(500);
+      digitalWrite(LED_R, LOW);
+      digitalWrite(LED_L, LOW);
+      delay(500);
+    }
   }
 
 }
@@ -449,15 +411,7 @@ void setup() {
 
 //***start
 if(initWiFi()) {
-    for (int i = 0; i < 2; i++)
-    {
-      digitalWrite(LED_R, HIGH);
-      digitalWrite(LED_L, HIGH);
-      delay(2000);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, LOW);
-      delay(2000);
-    }
+    lampuled("sukses");
     // Route for root / web page
     server.on("/", HTTP_GET, [] (AsyncWebServerRequest *request) {
     // GET input1 value on <ESP_IP>/?State=
@@ -477,20 +431,7 @@ if(initWiFi()) {
     Serial.println("Setting AP (Access Point)");
     // NULL sets an open Access Point
     WiFi.softAP("ESP-WIFI-CAR", "12345678");
-
-    for (int i = 0; i <= 3; i++)
-    {
-      digitalWrite(LED_R, HIGH);
-      digitalWrite(LED_L, LOW);
-      delay(500);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, HIGH);
-      delay(500);
-      digitalWrite(LED_R, LOW);
-      digitalWrite(LED_L, LOW);
-      delay(500);
-    }
-
+    lampuled("loading");
     IPAddress IP = WiFi.softAPIP();
     IPLocal=IP.toString();
     Serial.print("AP IP address: ");

@@ -18,40 +18,40 @@
           <h2>MY IP = %MYIP%</h2>
         </div>
       </div>
-      <div class="row  mt-3">
-        <div class="col col-md-2">
-          <button onmousedown="mouseLF()" onmouseup="mouseUp()" class="btn btn-primary" style="width:80px">LF</button>
+      <div class="row justify-content-lg-center mt-3">
+        <div class="col-4 col-lg-2">
+          <button onmousedown="mouseLF()" onmouseup="mouseUp()" class="btn btn-lg btn-primary w-100 w">LF</button>
         </div>
-        <div class="col col-md-auto">
-          <button onmousedown="mouseF()" onmouseup="mouseUp()" class="btn btn-success" style="width:80px">F</button>
+        <div class="col-4 col-lg-2">
+          <button onmousedown="mouseF()" onmouseup="mouseUp()" class="btn btn-lg btn-success w-100">F</button>
         </div>
-        <div class="col col-md-2">
-          <button onmousedown="mouseRF()" onmouseup="mouseUp()" class="btn btn-primary" style="width:80px">RF</button>
-        </div>
-      </div>
-      <div class="row  mt-3">
-        <div class="col col-md-2">
-          <button onmousedown="mouseL()" onmouseup="mouseUp()" class="btn btn-success" style="width:80px">L</button>
-        </div>
-        <div class="col col-md-auto">
-          <button onmousedown="mouseS()" onmouseup="mouseUp()" class="btn btn-danger" style="width:80px">S</button>
-        </div>
-        <div class="col col-md-2">
-          <button onmousedown="mouseR()" onmouseup="mouseUp()" class="btn btn-success" style="width:80px">R</button>
+        <div class="col-4 col-lg-2">
+          <button onmousedown="mouseRF()" onmouseup="mouseUp()" class="btn btn-lg btn-primary w-100">RF</button>
         </div>
       </div>
-      <div class="row  mt-3">
-        <div class="col col-md-2">
-          <button onmousedown="mouseLB()" onmouseup="mouseUp()" class="btn btn-primary" style="width:80px">LB</button>
+      <div class="row justify-content-lg-center mt-4">
+        <div class="col-4 col-lg-2">
+          <button onmousedown="mouseL()" onmouseup="mouseUp()" class="btn btn-lg btn-success w-100 w">L</button>
         </div>
-        <div class="col col-md-auto">
-          <button onmousedown="mouseB()" onmouseup="mouseUp()" class="btn btn-success" style="width:80px">B</button>
+        <div class="col-4 col-lg-2">
+          <button onmousedown="mouseS()" onmouseup="mouseUp()" class="btn btn-lg btn-danger w-100">S</button>
         </div>
-        <div class="col col-md-2">
-          <button onmousedown="mouseRB()" onmouseup="mouseUp()" class="btn btn-primary" style="width:80px">RB</button>
+        <div class="col-4 col-lg-2">
+          <button onmousedown="mouseR()" onmouseup="mouseUp()" class="btn btn-lg btn-success w-100">R</button>
         </div>
       </div>
-
+      <div class="row justify-content-lg-center mt-4">
+        <div class="col-4 col-lg-2">
+          <button onmousedown="mouseLB()" onmouseup="mouseUp()" class="btn btn-lg btn-primary w-100 w">LB</button>
+        </div>
+        <div class="col-4 col-lg-2">
+          <button onmousedown="mouseB()" onmouseup="mouseUp()" class="btn btn-lg btn-success w-100">B</button>
+        </div>
+        <div class="col-4 col-lg-2">
+          <button onmousedown="mouseRB()" onmouseup="mouseUp()" class="btn btn-lg btn-primary w-100">RB</button>
+        </div>
+      </div>
+    </div>
     <script src="bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script>
       let params = new URL(document.location).searchParams;
@@ -109,8 +109,6 @@
         let State = params.get("State");
         console.log(State);  
       }
-
-
     </script>
   </body>
 </html>

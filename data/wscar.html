@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ESP8266 WIFI CAR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="favicon.png">
+  </head>
+  <body>
+    <div class="container text-center">
+      <div class="row">
+        <div class="col col-md-12 mt-3 bg-dark text-light">
+          <h1>ESP8266 WIFI CAR</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-md-12 bg-primary text-light">
+          <h2>MY IP = %MYIP%</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-md-12 bg-success text-light">
+          <h2 id="state">S</h2>
+        </div>
+      </div>
+      <div class="row justify-content-lg-center mt-3">
+        <div class="col-4 col-lg-2">
+          <button ontouchstart='SendFunction("LF")' onmousedown='SendFunction("LF")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-primary w-100 w">LF</button>
+        </div>
+        <div class="col-4 col-lg-2">
+          <button ontouchstart='SendFunction("F")' onmousedown='SendFunction("F")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-success w-100">F</button>
+        </div>
+        <div class="col-4 col-lg-2">
+          <button ontouchstart='SendFunction("RF")' onmousedown='SendFunction("RF")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-primary w-100">RF</button>
+        </div>
+      </div>
+      <div class="row justify-content-lg-center mt-4">
+        <div class="col-4 col-lg-2">
+          <button ontouchstart='SendFunction("L")' onmousedown='SendFunction("L")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-success w-100 w">L</button>
+        </div>
+        <div class="col-4 col-lg-2">
+          <button ontouchstart='SendFunction("S")' onmousedown='SendFunction("S")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-danger w-100">S</button>
+        </div>
+        <div class="col-4 col-lg-2">
+          <button ontouchstart='SendFunction("R")' onmousedown='SendFunction("R")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-success w-100">R</button>
+        </div>
+      </div>
+      <div class="row justify-content-lg-center mt-4">
+        <div class="col-4 col-lg-2">
+          <button ontouchstart='SendFunction("LB")' onmousedown='SendFunction("LB")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-primary w-100 w">LB</button>
+        </div>
+        <div class="col-4 col-lg-2">
+          <button ontouchstart='SendFunction("B")' onmousedown='SendFunction("B")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-success w-100">B</button>
+        </div>
+        <div class="col-4 col-lg-2">
+          <button ontouchstart='SendFunction("RB")' onmousedown='SendFunction("RB")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-primary w-100">RB</button>
+        </div>
+      </div>
+    </div>
+    <script src="bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+      var webSocketCarInputUrl = "ws:\/\/" + window.location.hostname + "/ws";      
+      var websocketCarInput;
+      function initCarInputWebSocket() 
+      {
+        websocketCarInput = new WebSocket(webSocketCarInputUrl);
+        websocketCarInput.onopen    = onOpen;
+        websocketCarInput.onclose   = onClose;
+        websocketCarInput.onmessage = onMessage;        
+      }
+      function onOpen(event) {
+        console.log('Connection opened');
+      }
+      function onClose(event) {
+        console.log('Connection closed');
+        setTimeout(initCarInputWebSocket, 2000);
+      }
+      function onMessage(event) {
+        var state;
+        console.log(event.data);
+        if (event.data == "F"){
+          state = "F";
+        }else if (event.data == "B"){
+          state = "B";
+        }else if (event.data == "L"){
+          state = "L";
+        }else if (event.data == "R"){
+          state = "R";
+        }else if (event.data == "RF"){
+          state = "RF";
+        }else if (event.data == "RB"){
+          state = "RB";
+        }else if (event.data == "LF"){
+          state = "LF";
+        }else if (event.data == "LB"){
+          state = "LB";
+        }else{
+          state = "S";
+        }
+        document.getElementById('state').innerHTML = state;
+      }
+
+      function initWebSocket() 
+      {
+        initCarInputWebSocket();
+      }
+
+      function SendFunction(value) 
+      {
+        var data = value;
+        websocketCarInput.send(data);
+      } 
+      window.onload = initWebSocket;  
+    </script>
+  </body>
+</html>

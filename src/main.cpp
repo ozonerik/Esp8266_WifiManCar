@@ -28,11 +28,66 @@ void speed(int s){
   speedB= s;
 }
 String lampu = "stop";
+String pesan;
 
 //const char* ssid = "NodeMCU Car";
 //const char* pswd = "12345678";
 //ESP8266WebServer server(80);
 AsyncWebServer server(80);
+AsyncWebSocket ws("/ws");
+
+//websocket fungsi
+void notifyClients() {
+  ws.textAll(String(pesan));
+  Serial.println(String(pesan));
+}
+
+void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
+  AwsFrameInfo *info = (AwsFrameInfo*)arg;
+  if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
+    data[len] = 0;
+    if (strcmp((char*)data, "F") == 0) {
+      pesan = "F";
+      notifyClients();
+    }else if (strcmp((char*)data, "B") == 0) {
+      pesan = "B";
+      notifyClients();
+    }else if (strcmp((char*)data, "L") == 0) {
+      pesan = "L";
+      notifyClients();
+    }else if (strcmp((char*)data, "R") == 0) {
+      pesan = "R";
+      notifyClients();
+    }else{
+      pesan = "S";
+      notifyClients();
+    }
+  }
+}
+
+void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type,
+             void *arg, uint8_t *data, size_t len) {
+  switch (type) {
+    case WS_EVT_CONNECT:
+      Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
+      break;
+    case WS_EVT_DISCONNECT:
+      Serial.printf("WebSocket client #%u disconnected\n", client->id());
+      break;
+    case WS_EVT_DATA:
+      handleWebSocketMessage(arg, data, len);
+      break;
+    case WS_EVT_PONG:
+    case WS_EVT_ERROR:
+      break;
+  }
+}
+
+void initWebSocket() {
+  ws.onEvent(onEvent);
+  server.addHandler(&ws);
+}
+//end websocket
 
 //****Start Wifi Manager
 // Search for parameter in HTTP POST request

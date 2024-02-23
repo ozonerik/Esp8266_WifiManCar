@@ -56,10 +56,18 @@
           <button ontouchstart='SendFunction("RB")' onmousedown='SendFunction("RB")' onmouseup='SendFunction("S")' ontouchend='SendFunction("S")' class="btn btn-lg btn-primary w-100">RB</button>
         </div>
       </div>
+      <div class="row mt-4">
+        <div class="col-6">
+          <a href="/wifimanager" class="btn btn-lg btn-primary w-100" style="width:100px">WIFI MANAGER</a>
+        </div>
+        <div class="col-6">
+          <a href="/reset" class="btn btn-lg btn-primary w-100" style="width:100px">RESET WIFI</a>
+        </div>
+      </div>
     </div>
     <script src="bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script>
-      var webSocketCarInputUrl = "ws:\/\/" + window.location.hostname + "/ws";      
+      var webSocketCarInputUrl = "ws:\/\/" + window.location.hostname + "/wscar/ws";      
       var websocketCarInput;
       function initCarInputWebSocket() 
       {

@@ -19,96 +19,11 @@
         </div>
       </div>
       <div class="row justify-content-lg-center mt-3">
-        <div class="col-4 col-lg-2">
-          <button onmousedown="mouseLF()" onmouseup="mouseUp()" class="btn btn-lg btn-primary w-100 w">LF</button>
-        </div>
-        <div class="col-4 col-lg-2">
-          <button onmousedown="mouseF()" onmouseup="mouseUp()" class="btn btn-lg btn-success w-100">F</button>
-        </div>
-        <div class="col-4 col-lg-2">
-          <button onmousedown="mouseRF()" onmouseup="mouseUp()" class="btn btn-lg btn-primary w-100">RF</button>
-        </div>
-      </div>
-      <div class="row justify-content-lg-center mt-4">
-        <div class="col-4 col-lg-2">
-          <button onmousedown="mouseL()" onmouseup="mouseUp()" class="btn btn-lg btn-success w-100 w">L</button>
-        </div>
-        <div class="col-4 col-lg-2">
-          <button onmousedown="mouseS()" onmouseup="mouseUp()" class="btn btn-lg btn-danger w-100">S</button>
-        </div>
-        <div class="col-4 col-lg-2">
-          <button onmousedown="mouseR()" onmouseup="mouseUp()" class="btn btn-lg btn-success w-100">R</button>
-        </div>
-      </div>
-      <div class="row justify-content-lg-center mt-4">
-        <div class="col-4 col-lg-2">
-          <button onmousedown="mouseLB()" onmouseup="mouseUp()" class="btn btn-lg btn-primary w-100 w">LB</button>
-        </div>
-        <div class="col-4 col-lg-2">
-          <button onmousedown="mouseB()" onmouseup="mouseUp()" class="btn btn-lg btn-success w-100">B</button>
-        </div>
-        <div class="col-4 col-lg-2">
-          <button onmousedown="mouseRB()" onmouseup="mouseUp()" class="btn btn-lg btn-primary w-100">RB</button>
+        <div class="col-12">
+          <a href="/wscar" class="btn btn-lg btn-primary w-100" style="width:150px">Goto Controller</a>
         </div>
       </div>
     </div>
     <script src="bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script>
-      let params = new URL(document.location).searchParams;
-      function mouseUp() {
-        location.assign('?State=S');
-        let State = params.get("State");
-        console.log(State);  
-      }
-      function mouseS() {
-        location.assign('?State=S');
-        let State = params.get("State");
-        console.log(State);  
-      }
-
-      function mouseL() {
-        location.assign('?State=L');
-        let State = params.get("State");
-        console.log(State);  
-      }
-
-      function mouseR() {
-        location.assign('?State=R');
-        let State = params.get("State");
-        console.log(State);  
-      }
-
-      function mouseF() {
-        location.assign('?State=F');
-        let State = params.get("State");
-        console.log(State);  
-      }
-      function mouseLF() {
-        location.assign('?State=G');
-        let State = params.get("State");
-        console.log(State);  
-      }
-      function mouseRF() {
-        location.assign('?State=I');
-        let State = params.get("State");
-        console.log(State);  
-      }
-
-      function mouseB() {
-        location.assign('?State=B');
-        let State = params.get("State");
-        console.log(State);  
-      }
-      function mouseLB() {
-        location.assign('?State=J');
-        let State = params.get("State");
-        console.log(State);  
-      }
-      function mouseRB() {
-        location.assign('?State=H');
-        let State = params.get("State");
-        console.log(State);  
-      }
-    </script>
   </body>
 </html>

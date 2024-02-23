@@ -24,9 +24,12 @@ String command;             //String to store app command state.
 int speedA = 255;  // 0 to 255
 int speedB = 255;
 int speedCar = 255; //255+255
-void speed(int s){
-  speedA= s;
-  speedB= s;
+void speed(int a, int b  ){
+  analogWrite(ENA, a);
+  analogWrite(ENB, b);
+}
+void setSpeed(int s ){
+    speedCar = s;
 }
 
 String pesan;
@@ -102,7 +105,7 @@ void lampuled(String arah){
 }
 
 void forword() {  
-  speed(speedCar);           //forword
+  speed(speedCar,speedCar);           //forword
   digitalWrite(IN_1, HIGH);  //Right Motor forword Pin
   digitalWrite(IN_2, LOW);   //Right Motor backword Pin
   digitalWrite(IN_3, LOW);   //Left Motor backword Pin
@@ -113,6 +116,7 @@ void forword() {
 void rightforword() {  
   speedB=speedCar+(speedCar*(0.5));
   speedA=510 - speedB;
+  speed(speedA,speedB); 
   digitalWrite(IN_1, HIGH);  //Right Motor forword Pin
   digitalWrite(IN_2, LOW);   //Right Motor backword Pin
   digitalWrite(IN_3, LOW);   //Left Motor backword Pin
@@ -123,6 +127,7 @@ void rightforword() {
 void leftforword() {  
   speedA=speedCar+(speedCar*(0.5));
   speedB=510 - speedA;
+  speed(speedA,speedB); 
   digitalWrite(IN_1, HIGH);  //Right Motor forword Pin
   digitalWrite(IN_2, LOW);   //Right Motor backword Pin
   digitalWrite(IN_3, LOW);   //Left Motor backword Pin
@@ -131,7 +136,7 @@ void leftforword() {
 }
 
 void backword() {            //backword
-  speed(speedCar); 
+  speed(speedCar,speedCar); 
   digitalWrite(IN_1, LOW);   //Right Motor forword Pin
   digitalWrite(IN_2, HIGH);  //Right Motor backword Pin
   digitalWrite(IN_3, HIGH);  //Left Motor backword Pin
@@ -142,6 +147,7 @@ void backword() {            //backword
 void leftbackword() {            //backword
   speedB=speedCar+(speedCar*(0.5));
   speedA=510 - speedB;
+  speed(speedA,speedB); 
   digitalWrite(IN_1, LOW);   //Right Motor forword Pin
   digitalWrite(IN_2, HIGH);  //Right Motor backword Pin
   digitalWrite(IN_3, HIGH);  //Left Motor backword Pin
@@ -152,6 +158,7 @@ void leftbackword() {            //backword
 void rightbackword() {            //backword
   speedA=speedCar+(speedCar*(0.5));
   speedB=510 - speedA;
+  speed(speedA,speedB); 
   digitalWrite(IN_1, LOW);   //Right Motor forword Pin
   digitalWrite(IN_2, HIGH);  //Right Motor backword Pin
   digitalWrite(IN_3, HIGH);  //Left Motor backword Pin
@@ -160,7 +167,7 @@ void rightbackword() {            //backword
 }
 
 void turnRight() {           //turnRight
-  speed(speedCar); 
+  speed(speedCar,speedCar); 
   digitalWrite(IN_1, LOW);   //Right Motor forword Pin
   digitalWrite(IN_2, HIGH);  //Right Motor backword Pin
   digitalWrite(IN_3, LOW);   //Left Motor backword Pin
@@ -169,7 +176,7 @@ void turnRight() {           //turnRight
 }
 
 void turnLeft() {            //turnLeft
-  speed(speedCar); 
+  speed(speedCar,speedCar); 
   digitalWrite(IN_1, HIGH);  //Right Motor forword Pin
   digitalWrite(IN_2, LOW);   //Right Motor backword Pin
   digitalWrite(IN_3, HIGH);  //Left Motor backword Pin
@@ -178,7 +185,7 @@ void turnLeft() {            //turnLeft
 }
 
 void Stop() {              //stop
-  speed(0);
+  speed(0,0);
   digitalWrite(IN_1, LOW);  //Right Motor forword Pin
   digitalWrite(IN_2, LOW);  //Right Motor backword Pin
   digitalWrite(IN_3, LOW);  //Left Motor backword Pin
@@ -384,7 +391,7 @@ bool initWiFi() {
   WiFi.begin(ssid.c_str(), pass.c_str());
 
   Serial.println("Connecting to WiFi...");
-  delay(2000);
+  delay(5000);
   if(WiFi.status() != WL_CONNECTED) {
     Serial.println("Failed to connect.");
     //reset AP
@@ -460,6 +467,7 @@ void setup() {
 
   initFS();
   initWebSocket();
+  setSpeed(225);
 
   pinMode(ENA, OUTPUT);
   pinMode(IN_1, OUTPUT);
@@ -631,10 +639,11 @@ void loop(){
   }
 
   //server.handleClient();
-  analogWrite(ENA, speedA);
-  analogWrite(ENB, speedB);
+  //analogWrite(ENA, speedA);
+  //analogWrite(ENB, speedB);
   //Serial.print("Command: ");
   //Serial.println(command);
+  //Serial.println("Speed= "+String(speedCar));
 
   //command = server.arg("State");
   if (command == "F") forword();
@@ -645,15 +654,15 @@ void loop(){
   else if (command == "G") leftforword();
   else if (command == "J") leftbackword();
   else if (command == "H") rightbackword();
-  else if (command == "9") speedCar=111; //12
-  else if (command == "8") speedCar=127; //39
-  else if (command == "7") speedCar=143; //66
-  else if (command == "6") speedCar=159; //93
-  else if (command == "5") speedCar=175; //120
-  else if (command == "4") speedCar=191; //147
-  else if (command == "3") speedCar=207; //175
-  else if (command == "2") speedCar=223; //201
-  else if (command == "1") speedCar=239; //228
-  else if (command == "0") speedCar=255; //255
+  else if (command == "9") setSpeed(150); //12
+  else if (command == "8") setSpeed(160); //39
+  else if (command == "7") setSpeed(170); //66
+  else if (command == "6") setSpeed(180); //93
+  else if (command == "5") setSpeed(190); //120
+  else if (command == "4") setSpeed(200); //147
+  else if (command == "3") setSpeed(210); //175
+  else if (command == "2") setSpeed(220); //201
+  else if (command == "1") setSpeed(230); //228
+  else if (command == "0") setSpeed(250); //255
   else if (command == "S") Stop();
 }
